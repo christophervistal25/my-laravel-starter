@@ -11,12 +11,12 @@ class ControllerUtilities {
     // TODO extract all resources related method to an abstract class
     // TODO extract all constant to an abstract class
     // TODO the only method that will appear is the make()
-    // Todo make an trait for getNamespace method
+    // TODO make an trait for getNamespace method
 
     use StringHelpers;
 
     private const options = [
-        'namespace'          => 'app\http\controllers',
+        'namespace'          => 'App\Http\Controllers',
         'controller'         => 'Controller',
         'illuminate_request' => 'use Illuminate\Http\Request;',
         'request_params'     => 'Request $request',
@@ -150,31 +150,53 @@ class ControllerUtilities {
 
     private function addResourceMethods()
     {
-        return $this->indexMethod() . $this->addCharacters("\n",2) .
-               $this->createMethod() . $this->addCharacters("\n",2) . 
-               $this->storeMethod() . $this->addCharacters("\n",2) .
-               $this->showMethod() . $this->addCharacters("\n",2) .
-               $this->editMethod() . $this->addCharacters("\n",2) .
-               $this->updateMethod() . $this->addCharacters("\n",2) .
-               $this->destroyMethod() . $this->addCharacters("\n",2) ;
+        return $this->indexMethod()   . $this->addCharacters("\n",2).
+               $this->createMethod()  . $this->addCharacters("\n",2). 
+               $this->storeMethod()   . $this->addCharacters("\n",2).
+               $this->showMethod()    . $this->addCharacters("\n",2).
+               $this->editMethod()    . $this->addCharacters("\n",2).
+               $this->updateMethod()  . $this->addCharacters("\n",2).
+               $this->destroyMethod() . $this->addCharacters("\n",2);
     }
 
-    public function make(string $class , bool $resource)
+    public function make(string $class , bool $resource , bool $resourceView = false)
     {
-        $namespace = $this->getNamespace();
-        
+        $namespace = self::options['namespace'];
+
+        $wantToMakeDirectories = Str::contains($class , ['\\','/']);
+
+        // Split the given  name if there's any type of slash
+        $directories = preg_split('~[\\\\/]~', $class);
+
+        $fileName = ($wantToMakeDirectories && is_array($directories))
+                                    ? array_pop($directories) : $class;
+
+        if ($wantToMakeDirectories) {
+
+            $namespace =  self::options['namespace'] . DIRECTORY_SEPARATOR . implode($directories , DIRECTORY_SEPARATOR);
+
+            File::isDirectory($namespace) or File::makeDirectory($namespace, 0777, true, true);
+        } 
+
+        // Prepare a content for the controller
         $contents = "<?php
 
-namespace {$this->getNamespace()};
+namespace ".self::options['namespace'].";
 
 ".self::options['illuminate_request']."
 
-class {$class} extends ".self::options['controller']." {
+class {$fileName} extends ".self::options['controller']." {
     ".($resource ? $this->addResourceMethods() : "//")."
 }";
+    
+        // Make a file and put the prepared contents
+        File::put($namespace . DIRECTORY_SEPARATOR . $fileName . ".php",
+            $contents);
 
-    File::put("${namespace}/{$class}.php",
-        $contents);
+        if ($resourceView) {
+            $this->addViewResource(Str::lower($fileName));
+        }
+
     }
 
     private function setDirectory(string $directory)

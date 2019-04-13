@@ -8,15 +8,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Illuminate\Container\Container;
 use App\Console\Utilities\ControllerUtilities;
 
-class c extends Command
+class ControllerCommand extends Command
 {
-    
+    // TODO seperate the option of resource and resource view.
+    // 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:controller {name} {--r|resource}';
+    protected $signature = 'make:controller {name} {--r|resource} {--rv|resourceview}';
 
     /**
      * The console command description.
@@ -46,21 +47,14 @@ class c extends Command
 
         $controllerName = Str::studly($this->argument('name'));
         
-        if ($this->options()['resource']) {
+        $choices = $this->choice('Do you want to add a resource view for this controller?'
+                                , ['No', 'Yes'],1);
 
-            $this->controller
-                    ->make($controllerName , true);
+        $resourceView = ($choices === 'Yes') ? true : false;
 
-            $this->controller
-                    ->addViewResource(Str::lower($controllerName));
+        $this->controller
+                ->make($controllerName , $this->options()['resource'],$resourceView);
 
-            $this->info('Resource view successfully created.');
-            
-        } else {
-            $this->controller
-                    ->make($controllerName , false);
-        }
-        
         $this->info('Successfully create new controller.');
     }
 }
