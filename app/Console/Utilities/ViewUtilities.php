@@ -14,14 +14,23 @@ class ViewUtilities {
         return $this;
     }
 
-    private function addView(string $name)
+    private function addView(string $name , string $content = null)
     {
+        // Initialize Location for the file
+        $location = resource_path('views/' . $this->directory . '/' . $name . '.blade.php') ;
+
         // Create a file with the corresponding name and directory
-        fopen(
-            resource_path('views/' . $this->directory . '/' . $name . '.blade.php')
-        ,'w');
+        $file = fopen($location,'w');
+
+        // Add some content to the file
+        fwrite($file,$content);
 
         return $this;
+    }
+
+    public function isViewResourceNeed(bool $resource , string $name)
+    {
+        $resource ? $this->addViewResource($name) : null;
     }
 
     public function addViewResource(string $controllerName)

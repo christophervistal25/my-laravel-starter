@@ -1,6 +1,7 @@
 <?php 
 namespace App\Console\Utilities\Abstracts;
 use App\Console\Utilities\StringHelpers;
+
 abstract class ControllerResource {
     
     use StringHelpers;

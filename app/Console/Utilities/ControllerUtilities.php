@@ -7,11 +7,30 @@ use Illuminate\Support\Facades\File;
 
 class ControllerUtilities extends ControllerResource {
 
+    // TODO if the resource is true and resource view also set to true
+    // then add a return view each method in controller.
+    // TODO add Route model binding for controller resource methods.
+    // TODO add abstract class for View insert all constants values on it.
+    // TODO if the view already has a content ask first the user if it wants to override it.
+
     private $view;
 
     public function __construct(ViewUtilities $view)
     {
         $this->view = $view;
+    }
+
+    private function contentForController(array $controller = [])
+    {   
+        return "<?php
+
+namespace ".$controller['namespace'].";
+
+".self::options['illuminate_request']."
+
+class {$controller['name']} extends ".self::options['controller']." {
+    ".($controller['resource'] ? $this->addResourceMethods() : "//")."
+}";
     }
    
     public function make(string $class , bool $resource , bool $resourceView = false)
@@ -21,38 +40,33 @@ class ControllerUtilities extends ControllerResource {
 
         $hasADirectory = Str::contains($class , ['\\','/']);
 
-        // Split the given name
+        // Split the given name by / or \
         $directories = preg_split('~[\\\\/]~', $class);
 
         // Get the filename which is the last element of array
         // otherwise just assign the default classname
         $fileName = ($hasADirectory && is_array($directories))
                                     ? array_pop($directories) : $class;
-        // Make a directory
         if ($hasADirectory) {
-            $namespace =  self::options['namespace'] . DIRECTORY_SEPARATOR . implode($directories , DIRECTORY_SEPARATOR);
-            
+
+            $namespace =  self::options['namespace'] .
+                          DIRECTORY_SEPARATOR .
+                          implode($directories , DIRECTORY_SEPARATOR);
+
             File::isDirectory($namespace) or File::makeDirectory($namespace, 0777, true, true);
         } 
 
-        // Prepare a content for the controller
-        $contents = "<?php
-
-namespace ".$namespace.";
-
-".self::options['illuminate_request']."
-
-class {$fileName} extends ".self::options['controller']." {
-    ".($resource ? $this->addResourceMethods() : "//")."
-}";
-        
-        // Make a file and put the prepared contents
+        // Make a file and put the controller contents 
+        // depending on user inputted options
         File::put($namespace . DIRECTORY_SEPARATOR . $fileName . ".php",
-            $contents);
+            $this->contentForController([
+                'namespace' => $namespace,
+                'name'      => $fileName,
+                'resource'  => $resource
+        ]));
 
-        if ($resourceView) {
-            $this->view->addViewResource(Str::lower($fileName));
-        }
+        // Will check if views for controller is need
+        $this->view->isViewResourceNeed($resourceView , Str::lower($fileName));
 
     }
 
