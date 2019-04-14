@@ -10,14 +10,12 @@ use App\Console\Utilities\ControllerUtilities;
 
 class ControllerCommand extends Command
 {
-    // TODO seperate the option of resource and resource view.
-    // 
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:controller {name} {--r|resource} {--rv|resourceview}';
+    protected $signature = 'make:controller {name} {--r|resource}';
 
     /**
      * The console command description.
