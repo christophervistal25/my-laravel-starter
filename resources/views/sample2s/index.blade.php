@@ -6,7 +6,7 @@
 <table id="items-table" class="table table-bordered">
     <thead class="text-center">
         <tr>
-        <td class="text-capitalize">name</td><td class="text-capitalize">email</td><td class="text-capitalize">password</td>
+        <td class="text-capitalize">test</td><td class="text-capitalize">test2</td><td class="text-capitalize">test3</td><td class="text-capitalize">test4</td>
         <td>ACTIONS</td>
         </tr>
     </thead>
@@ -14,7 +14,7 @@
             <!-- CHANGE THE MODEL NAME -->
             @foreach($modelname as $model) 
                 <tr>
-                    <td>{{$model->}}</td><td>{{$model->}}</td><td>{{$model->}}</td>    
+                    <td>{{$model->}}</td><td>{{$model->}}</td><td>{{$model->}}</td><td>{{$model->}}</td>    
                     <!-- ADD THE EDIT AND DELETE MODAL NAME HERE -->
                     <td><a href="#">EDIT</a> | <a href="#">DELETE</a></td>
                 </tr>
@@ -36,18 +36,23 @@
             <form action="">
                 @csrf 
                 <div class='form-group'>
-                    <label for='#Name'>Name</label>
-                    <input type='text' name='name' id='Name'>
+                    <label for='#Test'>Test</label>
+                    <input type='text' name='test' id='Test'>
                 </div>
             
                 <div class='form-group'>
-                    <label for='#Email'>Email</label>
-                    <input type='text' name='email' id='Email'>
+                    <label for='#Test2'>Test2</label>
+                    <input type='text' name='test2' id='Test2'>
                 </div>
             
                 <div class='form-group'>
-                    <label for='#Password'>Password</label>
-                    <input type='text' name='password' id='Password'>
+                    <label for='#Test3'>Test3</label>
+                    <input type='text' name='test3' id='Test3'>
+                </div>
+            
+                <div class='form-group'>
+                    <label for='#Test4'>Test4</label>
+                    <input type='text' name='test4' id='Test4'>
                 </div>
             
           </div>
@@ -80,18 +85,23 @@
                 </div>
          
                 <div class='form-group'>
-                    <label for='#Name'>Name</label>
-                    <input type='text' name='name' id='Name'>
+                    <label for='#Test'>Test</label>
+                    <input type='text' name='test' id='Test'>
                 </div>
             
                 <div class='form-group'>
-                    <label for='#Email'>Email</label>
-                    <input type='text' name='email' id='Email'>
+                    <label for='#Test2'>Test2</label>
+                    <input type='text' name='test2' id='Test2'>
                 </div>
             
                 <div class='form-group'>
-                    <label for='#Password'>Password</label>
-                    <input type='text' name='password' id='Password'>
+                    <label for='#Test3'>Test3</label>
+                    <input type='text' name='test3' id='Test3'>
+                </div>
+            
+                <div class='form-group'>
+                    <label for='#Test4'>Test4</label>
+                    <input type='text' name='test4' id='Test4'>
                 </div>
             
               </div>

@@ -5,7 +5,7 @@ use App\Console\Utilities\Abstracts\ControllerResource;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 
-class ControllerUtilities extends ControllerResource {
+class Controller extends ControllerResource {
 
     // TODO if the resource is true and resource view also set to true
     // then add a return view each method in controller.
@@ -13,9 +13,9 @@ class ControllerUtilities extends ControllerResource {
     // TODO add abstract class for View insert all constants values on it.
     // TODO if the view already has a content ask first the user if it wants to override it.
 
-    private $view;
+    public $view;
 
-    public function __construct(ViewUtilities $view)
+    public function __construct(View $view)
     {
         $this->view = $view;
     }

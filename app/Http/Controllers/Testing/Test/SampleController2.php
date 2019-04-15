@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Test\Testing;
+namespace App\Http\Controllers\Testing\Test;
 
 use Illuminate\Http\Request;
 
-class TestController2 extends Controller {
+class SampleController2 extends Controller {
     
     /**
       * Display a listing of the resource.
